@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="cbd_mq" />
+        <module name="cbd_order" />
+        <module name="cbd_order_api" />
+        <module name="cbd_sale" />
+        <module name="cbd_sale_api" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cbd_mq" target="1.7" />
+      <module name="cbd_order" target="1.7" />
+      <module name="cbd_order_api" target="1.6" />
+      <module name="cbd_parent" target="1.6" />
+      <module name="cbd_sale" target="1.7" />
+      <module name="cbd_sale_api" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
