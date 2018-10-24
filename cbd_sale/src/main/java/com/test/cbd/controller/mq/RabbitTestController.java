@@ -18,6 +18,7 @@ public class RabbitTestController {
     @PostMapping("/hello")
     public void hello() {
         String sendMsg = "hello1 " + new Date();
+        System.out.println(sendMsg);
         rabbitMQService.sendText("helloQueue",sendMsg);
     }
 }

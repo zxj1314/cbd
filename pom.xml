@@ -23,6 +23,7 @@
         <module>cbd_order_api</module>
         <module>cbd_order</module>
         <module>cbd_mq</module>
+        <module>cbd_test</module>
     </modules>
 
 
