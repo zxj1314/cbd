@@ -1,0 +1,33 @@
+package ${package}.mapper;
+
+#if(!$pkOne)
+import org.apache.ibatis.annotations.Param;
+#end
+import org.apache.ibatis.annotations.Mapper;
+import com.hdvon.nmp.vcase.framework.dao.BaseDAO;
+import ${package}.vo.${className}VO;
+import ${package}.domain.${className}DO;
+
+/**
+ * DAO
+ * @author ${author}
+ * @date ${datetime}
+ * 版权所有：@撸码识途 版权所有(C) 2018
+ */
+@Mapper
+public interface ${className}Mapper extends BaseDAO<${className}VO, ${className}DO> {
+
+#if(!$pkOne)
+    /**
+     * 根据组合主键删除实体
+     * @return
+     */
+    int deleteByPK(#foreach ($column in $pkList) @Param("$column.attrname")$column.attrType $column.attrname#if($velocityHasNext),#end #end);
+
+    /**
+     * 根据组合主键获取实体
+     * @return 实体
+     */
+    ${className}VO findByPK(#foreach ($column in $pkList) @Param("$column.attrname")$column.attrType $column.attrname#if($velocityHasNext),#end #end);
+#end
+}

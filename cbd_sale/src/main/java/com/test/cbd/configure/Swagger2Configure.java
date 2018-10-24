@@ -33,7 +33,7 @@ public class Swagger2Configure {
                 .apiInfo(apiInfo())
                 .select()
                 // 自行修改为自己的包路径
-                .apis(RequestHandlerSelectors.basePackage("com.test.cbd.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.test.sale.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(setHeaderToken());

@@ -1,0 +1,37 @@
+package ${package}.domain;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.Date;
+import javax.persistence.*;
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+import com.hdvon.nmp.vcase.framework.domain.BaseDO;
+
+/**
+ * DO对象：${comments}
+ * @author ${author}
+ * @date ${datetime}
+ * 版权所有：@撸码识途 版权所有(C) 2018
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "${tableName}")
+public class ${className}DO extends BaseDO {
+
+#foreach ($column in $columns)
+#if($column.pk)
+    @Id
+#end
+    //$column.comments
+    @Column(name = "$column.columnName")
+    private $column.attrType $column.attrname;
+
+#end
+
+}

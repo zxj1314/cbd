@@ -1,0 +1,24 @@
+package ${package}.service.impl;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.hdvon.nmp.vcase.framework.service.BaseBusServiceImpl;
+import ${package}.vo.${className}VO;
+import ${package}.domain.${className}DO;
+import ${package}.mapper.${className}Mapper;
+import ${package}.service.${className}Service;
+
+/**
+ * Service
+ * @author ${author}
+ * @date ${datetime}
+ * 版权所有：@撸码识途 版权所有(C) 2018
+ */
+@Slf4j
+@com.alibaba.dubbo.config.annotation.Service(interfaceClass = ${className}Service.class)
+@Service
+@Transactional
+public class ${className}ServiceImpl extends BaseBusServiceImpl<${className}VO, ${className}DO, ${className}Mapper> implements ${className}Service{
+
+}

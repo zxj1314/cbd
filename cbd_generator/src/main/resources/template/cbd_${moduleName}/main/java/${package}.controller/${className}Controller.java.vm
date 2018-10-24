@@ -1,0 +1,31 @@
+package ${package}.controller;
+
+import com.alibaba.dubbo.config.annotation.Reference;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.hdvon.nmp.vcase.framework.controller.BaseController;
+import ${package}.service.${className}Service;
+import ${package}.vo.${className}VO;
+
+/**
+ * Controller
+ * @author ${author}
+ * @date ${datetime}
+ * 版权所有：@撸码识途 版权所有(C) 2018
+ */
+@Slf4j
+@Api(value="${comments}",description="${comments}")
+@RestController
+@RequestMapping("${moduleNameUrl}/${classname}")
+public class ${className}Controller extends BaseController<${className}VO> {
+
+    @Reference
+    private ${className}Service ${classname}Service;
+
+    @Override
+    protected ${className}Service getBaseService() {
+        return  ${classname}Service;
+    }
+}
