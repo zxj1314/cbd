@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="cbd_sale:war">
-    <output-path>$PROJECT_DIR$/cbd_sale/target</output-path>
-    <root id="archive" name="cbd_sale.war">
-      <element id="artifact" artifact-name="cbd_sale:war exploded" />
-    </root>
-  </artifact>
-</component>
