@@ -1,7 +1,7 @@
 package com.test.cbd.framework.controller;
 
-import com.test.cbd.framework.exception.BizException;
-import com.test.cbd.framework.exception.BizRuntimeException;
+import com.test.cbd.common.exception.BizException;
+import com.test.cbd.common.exception.BizRuntimeException;
 import com.test.cbd.framework.response.HttpResponse;
 import com.test.cbd.framework.response.ResponseCode;
 import lombok.extern.slf4j.Slf4j;

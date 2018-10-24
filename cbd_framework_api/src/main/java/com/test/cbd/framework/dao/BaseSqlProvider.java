@@ -1,6 +1,6 @@
 package com.test.cbd.framework.dao;
 
-import com.test.cbd.framework.exception.BizRuntimeException;
+import com.test.cbd.common.exception.BizRuntimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 

@@ -11,5 +11,26 @@
 
     <artifactId>cbd_sale_api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.test.cbd</groupId>
+            <artifactId>cbd_framework_api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -27,6 +27,7 @@
         <module>cbd_framework_api</module>
         <module>cbd_framework</module>
         <module>cbd_commons</module>
+        <module>cbd_sale_api</module>
     </modules>
 
 
@@ -39,6 +40,8 @@
         <lombok.versin>1.16.18</lombok.versin>
         <springfox.version>2.8.0</springfox.version>
         <pagehelper-starter.version>1.2.3</pagehelper-starter.version>
+        <HikariCP.version>2.7.2</HikariCP.version>
+        <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
     </properties>
 
     <dependencyManagement>
@@ -116,6 +119,17 @@
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
             <version>5.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${HikariCP.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
     </dependencies>
     </dependencyManagement>
