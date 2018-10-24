@@ -3,7 +3,10 @@ package com.test.cbd.framework.dao;
 import com.test.cbd.framework.domain.BaseDO;
 import com.test.cbd.framework.vo.BaseVO;
 import com.test.cbd.framework.vo.QueryParam;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import java.io.Serializable;
 import java.util.List;

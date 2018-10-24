@@ -1,4 +1,4 @@
-package com.test.cbd.framework.exception;
+package com.test.cbd.common.exception;
 
 /**
  * <br>
