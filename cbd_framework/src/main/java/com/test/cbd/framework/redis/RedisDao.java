@@ -44,6 +44,17 @@ public class RedisDao implements InitializingBean {
         this.zSetOps = redisTemplate.opsForZSet();
     }
 
+    //简单的分布式锁
+    private boolean trySsoLock(String key,String value,int expireTime){
+        String lockKey = "lock:" + key;
+        boolean lockRes = putIfAbsent(lockKey, value);
+        if(lockRes==true){
+            lockRes = expire(lockKey, expireTime, TimeUnit.SECONDS);
+        }
+        return lockRes;
+    }
+
+
     /**
      * 返回ping值
      *
