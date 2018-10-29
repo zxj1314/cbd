@@ -28,7 +28,6 @@
         <module>cbd_framework</module>
         <module>cbd_commons</module>
         <module>cbd_generator</module>
-        <module>cbd_order_api</module>
         <module>cbd_sale_provider</module>
     </modules>
 

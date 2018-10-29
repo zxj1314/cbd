@@ -7,20 +7,32 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="cbd_commons" />
+        <module name="cbd_framework" />
+        <module name="cbd_framework_api" />
+        <module name="cbd_generator" />
         <module name="cbd_mq" />
         <module name="cbd_order" />
         <module name="cbd_order_api" />
         <module name="cbd_sale" />
         <module name="cbd_sale_api" />
+        <module name="cbd_sale_provider" />
+        <module name="cbd_test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="cbd_commons" target="1.6" />
+      <module name="cbd_framework" target="1.7" />
+      <module name="cbd_framework_api" target="1.6" />
+      <module name="cbd_generator" target="1.6" />
       <module name="cbd_mq" target="1.7" />
       <module name="cbd_order" target="1.7" />
       <module name="cbd_order_api" target="1.6" />
       <module name="cbd_parent" target="1.6" />
-      <module name="cbd_sale" target="1.7" />
+      <module name="cbd_sale" target="1.8" />
       <module name="cbd_sale_api" target="1.6" />
+      <module name="cbd_sale_provider" target="1.8" />
+      <module name="cbd_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
