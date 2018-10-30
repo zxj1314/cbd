@@ -24,7 +24,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 @RequestMapping("cbd/dubbo/user")
 public class DubboUserController extends BaseController<UserVO> {
 
-    @Reference(url = "dubbo://127.0.0.1:20880")
+    @Reference(url = "dubbo://127.0.0.1:20880",timeout = 60000)//目前不能通过 application.properties 定义
     private DubboUserService dubboUserService;
 
     @Override
@@ -35,5 +35,6 @@ public class DubboUserController extends BaseController<UserVO> {
     @GetMapping(value = "test")
     public void test(){
         System.out.println("test");
+        dubboUserService.login("dubbo","dubbo");
     }
 }
