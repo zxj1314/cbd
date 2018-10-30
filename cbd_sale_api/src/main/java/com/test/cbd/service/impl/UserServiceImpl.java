@@ -2,6 +2,7 @@ package com.test.cbd.service.impl;
 
 import com.test.cbd.framework.service.impl.BaseBusServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.test.cbd.vo.UserVO;
 import com.test.cbd.domain.UserDO;
@@ -19,8 +20,12 @@ import com.test.cbd.service.UserService;
 public class UserServiceImpl extends BaseBusServiceImpl<UserVO, UserDO, UserMapper>
     implements UserService{
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public UserVO login(String username, String password) {
-        return null;
+        UserVO userVO = userMapper.findById(username);
+        return userVO;
     }
 }
