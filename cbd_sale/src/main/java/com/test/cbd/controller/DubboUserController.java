@@ -1,5 +1,6 @@
 package com.test.cbd.controller;
 
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.test.cbd.framework.controller.BaseController;
 import com.test.cbd.service.DubboUserService;
 import com.test.cbd.service.UserService;
@@ -35,6 +36,7 @@ public class DubboUserController extends BaseController<UserVO> {
     @GetMapping(value = "test")
     public void test(){
         System.out.println("test");
+        RpcContext.getContext().setAttachment("token", "123456");//隐示传参，只有当消费端传给提供端的token一致时，才能正常调用。
         dubboUserService.login("dubbo","dubbo");
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@com.alibaba.dubbo.config.annotation.Service(interfaceClass = DubboUserService.class)
+@com.alibaba.dubbo.config.annotation.Service(interfaceClass = DubboUserService.class,token = "123456")//全局设置不了token
 public class DubboUserServiceImpl extends BaseBusServiceImpl<UserVO, UserDO, UserMapper>
     implements DubboUserService{
 
