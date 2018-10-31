@@ -1,5 +1,4 @@
 package com.test.cbd.zookeeper;
-/*
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Test;
@@ -32,4 +31,4 @@ public class ConfigTest {
     }
 
 
-}*/
+}

@@ -31,6 +31,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
+
         <dependency>
             <groupId>com.test.cbd</groupId>
             <artifactId>cbd_framework</artifactId>
@@ -104,6 +105,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.3</version>
         </dependency>
 
     </dependencies>
