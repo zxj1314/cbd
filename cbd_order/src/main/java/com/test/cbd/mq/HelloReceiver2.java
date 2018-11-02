@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RabbitListener(queues = "helloQueue")//随机轮询？
-public class HelloReceiver1 {
+public class HelloReceiver2 {
 
     @RabbitHandler
     public void process(String hello) {
-        System.out.println("Receiver1  : " + hello);
+        System.out.println("Receiver2  : " + hello);
     }
 
 }

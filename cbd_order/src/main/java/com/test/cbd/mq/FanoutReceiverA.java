@@ -5,12 +5,12 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RabbitListener(queues = "helloQueue")//随机轮询？
-public class HelloReceiver1 {
+@RabbitListener(queues = "fanout.A")
+public class FanoutReceiverA {
 
     @RabbitHandler
-    public void process(String hello) {
-        System.out.println("Receiver1  : " + hello);
+    public void process(String msg) {
+        System.out.println("FanoutReceiverA  : " + msg);
     }
 
 }

@@ -1,0 +1,16 @@
+package com.test.cbd.mq;
+
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Component;
+
+@Component
+@RabbitListener(queues = "topic.message")//topic.message绑定的是“topic.message”,只会收到topic.message的消息
+public class topicMessageReceiver {
+
+    @RabbitHandler
+    public void process(String msg) {
+        System.out.println("topicMessageReceiver  : " +msg);
+    }
+
+}
