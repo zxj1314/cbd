@@ -1,6 +1,7 @@
 package com.test.cbd.service;
 
 import com.test.cbd.framework.service.BaseBusService;
+import com.test.cbd.vo.UserInfo;
 import com.test.cbd.vo.UserVO;
 
 /**
@@ -13,4 +14,5 @@ public interface UserService extends BaseBusService<UserVO> {
 
     UserVO login(String username,String password);
 
+    UserInfo findByUsername(String userName);
 }
