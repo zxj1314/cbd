@@ -119,7 +119,6 @@
             <version>1.4.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.crazycake/shiro-redis -->
         <dependency>
             <groupId>org.crazycake</groupId>
             <artifactId>shiro-redis</artifactId>

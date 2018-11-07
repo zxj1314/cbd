@@ -19,14 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 
-/**
- * 功能：
- * 作者：chenjiefeng
- * 日期：2018/5/29
- * 版权所有：广州弘度信息科技有限公司 版权所有(C) 2018
- */
 @Slf4j
-@Api(value="用户登录",description="用户登录")
+@Api(value="shiro测试",description="shiro测试")
 @RestController
 @RequestMapping("/")
 public class ShiroLoginController {
@@ -44,7 +38,6 @@ public class ShiroLoginController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            System.out.println(subject.getSession().getAttribute("role"));
             jsonObject.put("token", subject.getSession().getId());
             jsonObject.put("msg", "登录成功");
         } catch (IncorrectCredentialsException e) {
@@ -66,20 +59,10 @@ public class ShiroLoginController {
      */
     @RequestMapping(value = "/check", method = RequestMethod.GET)
     @ResponseBody
-    @RequiresRoles("admin")
+    @RequiresRoles("guest")
     public String check() {
         JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("msg", "check");
-        } catch (IncorrectCredentialsException e) {
-            jsonObject.put("msg", "密码错误");
-        } catch (LockedAccountException e) {
-            jsonObject.put("msg", "登录失败，该用户已被冻结");
-        } catch (AuthenticationException e) {
-            jsonObject.put("msg", "该用户不存在");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        jsonObject.put("msg", "鉴权测试");
         return jsonObject.toString();
     }
 }
