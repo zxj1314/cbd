@@ -45,6 +45,7 @@ public class UserServiceImpl extends BaseBusServiceImpl<UserVO, UserDO, UserMapp
         admin.setPermissions(list);
         UserInfo root = UserInfo.builder().userName("root").password("b1ba853525d0f30afe59d2d005aad96c").credentialsSalt("123").state(0).build();
         List<SysRole> roleList=new ArrayList<SysRole>();
+        roleList.add(admin);
         root.setRoleList(roleList);
         return root;
     }

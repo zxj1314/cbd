@@ -6,11 +6,14 @@ import com.test.cbd.service.UserService;
 import com.test.cbd.vo.SysPermission;
 import com.test.cbd.vo.SysRole;
 import com.test.cbd.vo.UserInfo;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import springfox.documentation.spring.web.json.Json;
 
@@ -49,6 +52,9 @@ public class MyShiroRealm extends AuthorizingRealm {
         //通过username从数据库中查找 User对象，如果找到，没找到.
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         UserInfo userInfo = userInfoService.findByUsername(username);
+       // Subject subject = SecurityUtils.getSubject();
+        //Session session = subject.getSession();
+        //session.setAttribute("role",userInfo.getRoleList());
 //        System.out.println("----->>userInfo="+userInfo);
         if (userInfo == null) {
             return null;

@@ -9,7 +9,9 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ import java.net.InetAddress;
 public class ShiroLoginController {
 
     /**
-     * 登录方法
+     * 登录测试
      * @param userInfo
      * @return
      */
@@ -42,8 +44,33 @@ public class ShiroLoginController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
+            System.out.println(subject.getSession().getAttribute("role"));
             jsonObject.put("token", subject.getSession().getId());
             jsonObject.put("msg", "登录成功");
+        } catch (IncorrectCredentialsException e) {
+            jsonObject.put("msg", "密码错误");
+        } catch (LockedAccountException e) {
+            jsonObject.put("msg", "登录失败，该用户已被冻结");
+        } catch (AuthenticationException e) {
+            jsonObject.put("msg", "该用户不存在");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    /**
+     * 鉴权测试
+     * @param userInfo
+     * @return
+     */
+    @RequestMapping(value = "/check", method = RequestMethod.GET)
+    @ResponseBody
+    @RequiresRoles("admin")
+    public String check() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", "check");
         } catch (IncorrectCredentialsException e) {
             jsonObject.put("msg", "密码错误");
         } catch (LockedAccountException e) {
