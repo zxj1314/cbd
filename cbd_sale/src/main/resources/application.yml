@@ -1,0 +1,57 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    index: 0
+    name: cbd_sale
+
+  data:
+    elasticsearch:
+      cluster-nodes: 127.0.0.1:9300
+      cluster-name: elasticsearch
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    publisher-confirms: true
+    virtual-host: /
+    publisher-returns: true
+
+  dubbo:
+    registry: zookeeper://127.0.0.1:2181
+    server: false
+    port: 53351
+    version: 1.52
+    protocol: dubbo
+    appname: live-dubbo-consumer
+
+  redis:
+    shiro:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 5000
+      password: hd*e+rt
+
+
+  main:
+    banner-mode: "off"
+
+master:
+  db:
+    url: jdbc:mysql://localhost:3306/cbd?characterEncoding=UTF-8&useUnicode=true&useSSL=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+slave:
+  db:
+    url: dbc:mysql://localhost:3306/cbd_test?characterEncoding=UTF-8&useUnicode=true&useSSL=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+
+mybatis:
+  config-location: classpath:config/mybatis-config.xml
+  mapper-locations: classpath*:mapper/**/*.xml
