@@ -6,10 +6,10 @@ spring:
     index: 0
     name: cbd_sale
 
-  data:
-    elasticsearch:
-      cluster-nodes: 127.0.0.1:9300
-      cluster-name: elasticsearch
+#  data:
+#    elasticsearch:
+#      cluster-nodes: 127.0.0.1:9300
+#      cluster-name: elasticsearch
 
   rabbitmq:
     host: 127.0.0.1
@@ -28,12 +28,12 @@ spring:
     protocol: dubbo
     appname: live-dubbo-consumer
 
-  redis:
-    shiro:
-      host: 127.0.0.1
-      port: 6379
-      timeout: 5000
-      password: hd*e+rt
+#  redis:
+#    shiro:
+#      host: 127.0.0.1
+#      port: 6379
+#      timeout: 5000
+#      password: hd*e+rt
 
 
   main:

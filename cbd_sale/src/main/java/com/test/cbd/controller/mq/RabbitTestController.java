@@ -24,6 +24,9 @@ public class RabbitTestController {
     @Autowired
     private HelloSender helloSender;
 
+    @Autowired
+    private HelloSender1 helloSender1;
+
     @GetMapping("/hello")
     public void hello() {
         for(int i=0;i<=10;i++) {
@@ -61,10 +64,10 @@ public class RabbitTestController {
         rabbitMQService.sendFanoutSender("fanoutExchange", "cccc", msgString);//中间“cccc”参数随意不影响消费者接收。
     }
 
-    //带callback的消息发送,回调处理,Confirm机制
+    //测试Confirm机制
     @GetMapping("/sendSend")
     public void sendSend() {
-        helloSender.send();
+        helloSender1.send();
     }
 
 }

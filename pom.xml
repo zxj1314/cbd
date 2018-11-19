@@ -30,6 +30,7 @@
         <module>cbd_generator</module>
         <module>cbd_sale_provider</module>
         <module>cbd-component-es</module>
+        <module>cbd-conponent-shiro</module>
     </modules>
 
 

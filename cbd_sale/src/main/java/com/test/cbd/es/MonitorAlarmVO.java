@@ -29,8 +29,8 @@ public class MonitorAlarmVO implements Serializable {
     @Id
     private Long id;
     private String uniqueKey;
-    private Long monitoryPointId;//监控任务--表分区
-    private int modelDivisionType;//监控分类
+    private Long monitoryPointId;
+    private int modelDivisionType;
     private Long groupId;
     private int type;
     private int status;

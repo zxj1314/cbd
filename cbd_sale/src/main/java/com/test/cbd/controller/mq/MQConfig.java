@@ -52,6 +52,8 @@ public class MQConfig {
     TopicExchange exchange() {
         return new TopicExchange("exchange");
     }
+
+
     @Bean
     FanoutExchange fanoutExchange() {
         return new FanoutExchange("fanoutExchange");
