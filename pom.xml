@@ -29,6 +29,7 @@
         <module>cbd_commons</module>
         <module>cbd_generator</module>
         <module>cbd_sale_provider</module>
+        <module>cbd-component-es</module>
     </modules>
 
 
