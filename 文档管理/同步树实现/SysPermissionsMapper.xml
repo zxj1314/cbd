@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hdvon.rcp.admin.mapper.SysPermissionsMapper">
+
+    <resultMap id="sysPermissionsDO_Map" type="com.hdvon.rcp.admin.domain.SysPermissionsDO">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="open" column="is_open"/>
+        <result property="pid" column="pid"/>
+        <result property="treeCode" column="tree_code"/>
+        <result property="pageUrl" column="page_url"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="style" column="style"/>
+        <result property="rmk" column="rmk"/>
+    </resultMap>
+
+    <resultMap id="sysPermissionsVO_Map" type="com.hdvon.rcp.admin.vo.SysPermissionsVO" extends="sysPermissionsDO_Map" >
+
+    </resultMap>
+
+    <delete id="deleteById">
+        DELETE FROM sys_permissions WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM sys_permissions WHERE
+        id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator="," >#{id}</foreach>
+    </delete>
+
+    <select id="findById" resultMap="sysPermissionsVO_Map">
+        SELECT * FROM sys_permissions WHERE id = #{id}
+    </select>
+
+    <select id="findDoById" resultMap="sysPermissionsDO_Map">
+        SELECT * FROM sys_permissions WHERE id = #{id}
+    </select>
+
+    <select id="findByIds" resultMap="sysPermissionsVO_Map">
+        SELECT * FROM sys_permissions WHERE
+        id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator="," >#{id}</foreach>
+    </select>
+
+    <sql id="conditionBase">
+        <if test="paramBean != null">
+            <if test="@Ognl@isNotEmpty(paramBean.id)"> AND t.id = #{paramBean.id} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.code)"> AND t.code = #{paramBean.code} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.name)"> AND t.name = #{paramBean.name} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.type)"> AND t.type = #{paramBean.type} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.status)"> AND t.status = #{paramBean.status} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.open)"> AND t.is_open = #{paramBean.open} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.pid)"> AND t.pid = #{paramBean.pid} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.treeCode)"> AND t.tree_code = #{paramBean.treeCode} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.pageUrl)"> AND t.page_url = #{paramBean.pageUrl} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.orderNum)"> AND t.order_num = #{paramBean.orderNum} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.style)"> AND t.style = #{paramBean.style} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.rmk)"> AND t.rmk = #{paramBean.rmk} </if>
+            <if test="@Ognl@isNotEmpty(paramBean.textLike)"> AND t.name like concat('%', #{paramBean.textLike}, '%')  </if>
+        </if>
+    </sql>
+
+    <select id="findBy" resultMap="sysPermissionsVO_Map">
+        SELECT * FROM sys_permissions t
+        <where>
+            <include refid="conditionBase"/>
+        </where>
+    </select>
+
+    <select id="findByRoleId" resultMap="sysPermissionsVO_Map">
+        SELECT * FROM sys_permissions t
+        WHERE t.status=1  AND
+        EXISTS (select 1 from sys_body_perm_rel p where p.body_id=#{roleId} and t.id=p.perm_id and p.status=2)
+    </select>
+
+    <select id="getTreeNode" resultType="com.hdvon.core.framework.vo.TreeNode">
+        SELECT
+        id,name,code,pid
+        from
+        sys_permissions WHERE status=1
+    </select>
+
+    <!--select id="findMoreExample" resultMap="sysPermissionsVO_Map">
+        SELECT * FROM sys_permissions t, t_example e where t.id=e.t_id
+        <include refid="conditionBase"/>
+        <if test="paramBean != null and @Ognl@isNotEmpty(paramBean.extProtity)"> AND t.ext_column = #{paramBean.extProtity} </if>
+    </select-->
+</mapper>
