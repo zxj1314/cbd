@@ -46,6 +46,7 @@
         <HikariCP.version>2.7.2</HikariCP.version>
         <mysql-connector-java.version>5.1.45</mysql-connector-java.version>
         <dubbo-spring-boot-starter.version>1.0.2</dubbo-spring-boot-starter.version>
+        <elasticsearch.version>6.1.1</elasticsearch.version>
     </properties>
 
     <dependencyManagement>
@@ -169,6 +170,31 @@
             <version>1.5.10.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>transport-netty4-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.11.0</version>
+        </dependency>
 
     </dependencies>
     </dependencyManagement>
