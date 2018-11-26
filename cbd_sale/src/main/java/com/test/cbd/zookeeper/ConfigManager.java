@@ -54,6 +54,7 @@ public class ConfigManager {
         }
         zk.writeData(ZKUtil.FTP_CONFIG_NODE_NAME, ftpConfig);
         zk.close();
+        System.out.println("gittest");
     }
 
 
