@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-//测试确认后回调
+//测试消息者自动确认
 @Service
 public class HelloSender1 implements RabbitTemplate.ConfirmCallback {
 
@@ -20,10 +20,11 @@ public class HelloSender1 implements RabbitTemplate.ConfirmCallback {
     public void send() {
         String context = "你好现在是 " + new Date() +"";
         System.out.println("HelloSender发送内容 : " + context);
-        this.rabbitTemplate.setConfirmCallback(this);
+        this.rabbitTemplate.setConfirmCallback(this);//开启confirm机制
         MessageProperties properties=new MessageProperties();
         properties.setContentType(MessageProperties.DEFAULT_CONTENT_TYPE);
-        properties.setDeliveryMode(MessageProperties.DEFAULT_DELIVERY_MODE);
+        properties.setDeliveryMode(MessageProperties.DEFAULT_DELIVERY_MODE);//持久化
+        //properties.setExpiration("2018-12-15 23:23:23");//设置到期时间
         Message message=new Message("hello".getBytes(),properties);
         this.rabbitTemplate.sendAndReceive("exchange","topic.message",message);
         //exchange,queue 都正确,confirm被回调, ack=true

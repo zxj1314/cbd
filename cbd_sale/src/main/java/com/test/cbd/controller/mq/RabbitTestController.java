@@ -25,6 +25,9 @@ public class RabbitTestController {
     private HelloSender helloSender;
 
     @Autowired
+    private DLQueue dlQueue;
+
+    @Autowired
     private HelloSender1 helloSender1;
 
     @GetMapping("/hello")
@@ -68,6 +71,12 @@ public class RabbitTestController {
     @GetMapping("/sendSend")
     public void sendSend() {
         helloSender1.send();
+    }
+
+    //测试死信队列
+    @GetMapping("/sendSend1")
+    public void sendSend1() {
+        dlQueue.sendMsg("123");
     }
 
 }

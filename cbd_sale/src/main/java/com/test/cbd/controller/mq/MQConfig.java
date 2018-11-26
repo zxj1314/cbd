@@ -29,34 +29,9 @@ public class MQConfig {
     }
     //===============以上是验证topic Exchange的队列==========
 
-
-    //===============以下是验证Fanout Exchange的队列==========
-    @Bean
-    public Queue AMessage() {
-        return new Queue("fanout.A");
-    }
-
-    @Bean
-    public Queue BMessage() {
-        return new Queue("fanout.B");
-    }
-
-    @Bean
-    public Queue CMessage() {
-        return new Queue("fanout.C");
-    }
-    //===============以上是验证Fanout Exchange的队列==========
-
-
     @Bean
     TopicExchange exchange() {
         return new TopicExchange("exchange");
-    }
-
-
-    @Bean
-    FanoutExchange fanoutExchange() {
-        return new FanoutExchange("fanoutExchange");
     }
 
     /**
@@ -81,6 +56,31 @@ public class MQConfig {
         return BindingBuilder.bind(queueMessages).to(exchange).with("topic.#");
     }
 
+
+    //===============以下是验证Fanout Exchange的队列==========
+    @Bean
+    public Queue AMessage() {
+        return new Queue("fanout.A");
+    }
+
+    @Bean
+    public Queue BMessage() {
+        return new Queue("fanout.B");
+    }
+
+    @Bean
+    public Queue CMessage() {
+        return new Queue("fanout.C");
+    }
+    //===============以上是验证Fanout Exchange的队列==========
+
+    @Bean
+    FanoutExchange fanoutExchange() {
+        return new FanoutExchange("fanoutExchange");
+    }
+
+
+
     @Bean
     Binding bindingExchangeA(Queue AMessage,FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(AMessage).to(fanoutExchange);
@@ -96,6 +96,9 @@ public class MQConfig {
         return BindingBuilder.bind(CMessage).to(fanoutExchange);
     }
 
+
+
+
     /**
      * 第二个参数：queue的持久化是通过durable=true来实现的。
      * 第三个参数：exclusive：排他队列，如果一个队列被声明为排他队列，该队列仅对首次申明它的连接可见，并在连接断开时自动删除。这里需要注意三点：1. 排他队列是基于连接可见的，同一连接的不同信道是可以同时访问同一连接创建的排他队列；2.“首次”，如果一个连接已经声明了一个排他队列，其他连接是不允许建立同名的排他队列的，这个与普通队列不同；3.即使该队列是持久化的，一旦连接关闭或者客户端退出，该排他队列都会被自动删除的，这种队列适用于一个客户端发送读取消息的应用场景。
@@ -107,8 +110,10 @@ public class MQConfig {
     @Bean
     public Queue queue() {
         Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-message-ttl", 25000);//25秒自动删除
-        Queue queue = new Queue("topic.messages", true, false, true, arguments);
+        //arguments.put("x-message-ttl", 25000);//25秒自动删除
+        Queue queue = new Queue("topic.messages", true, false, false, arguments);
         return queue;
     }
+
+
 }
