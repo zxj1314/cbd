@@ -31,6 +31,7 @@
         <module>cbd_sale_provider</module>
         <module>cbd-component-es</module>
         <module>cbd-conponent-shiro</module>
+        <module>cbd_zk</module>
     </modules>
 
 
