@@ -3,6 +3,12 @@ package com.hdvon.component.es.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
+import org.elasticsearch.search.aggregations.metrics.stats.Stats;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
@@ -18,8 +24,11 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.io.stream.InputStreamStreamInput;
+import org.elasticsearch.common.io.stream.StreamInput;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -27,6 +36,8 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
@@ -37,6 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest.AliasActions;
 
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
@@ -46,7 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
+@Component
 public class ElasticsearchUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticsearchUtils.class);
@@ -69,53 +81,86 @@ public class ElasticsearchUtils {
      */
     public static void createIndex(String index,String indexType,String filePath) throws RuntimeException {
         try {
-                StringBuffer strBuf = new StringBuffer();
-                //解析json配置
-                ClassPathResource resource = new ClassPathResource(filePath);
-                InputStream inputStream = resource.getInputStream();
+            StringBuffer strBuf = new StringBuffer();
+            //解析json配置
+            ClassPathResource resource = new ClassPathResource(filePath);
+            InputStream inputStream = resource.getInputStream();
 
-                int len = 0;
-                byte[] buf = new byte[1024];
-                while((len=inputStream.read(buf)) != -1) {
-                    strBuf.append(new String(buf, 0, len, "utf-8"));
-                }
-                inputStream.close();
-                //创建索引
-                createIndex(index);
-                //设置索引元素
-                putMapping(index, indexType, strBuf.toString());
+            int len = 0;
+            byte[] buf = new byte[1024];
+            while((len=inputStream.read(buf)) != -1) {
+                strBuf.append(new String(buf, 0, len, "utf-8"));
+            }
+            inputStream.close();
+            //创建索引
+            createIndex(index);
+            //设置索引元素
+            putMapping(index, indexType, strBuf.toString());
 
         }catch(Exception e){
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }
 
 
-        /**
-         * 创建索引
-         *
-         * @param index 索引名称
-         * @return
-         */
-        public static boolean createIndex(String index){
+    /**
+     * 创建索引
+     *
+     * @param index 索引名称
+     * @return
+     */
+    public static boolean createIndex(String index){
 
-            try {
-                if (isIndexExist(index)) {
-                    //索引库存在则删除索引
-                    deleteIndex(index);
-                }
-                CreateIndexResponse indexresponse = client.admin().indices().prepareCreate(index).setSettings(Settings.builder().put("index.number_of_shards", 5)
-                        .put("index.number_of_replicas", 1)
-                )
-                        .get();
-                LOGGER.info("创建索引 {} 执行状态 {}", index , indexresponse.isAcknowledged());
-
-                return indexresponse.isAcknowledged();
-            }catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+        try {
+            if (isIndexExist(index)) {
+                //索引库存在则删除索引
+                deleteIndex(index);
             }
+            CreateIndexResponse indexresponse = client.admin().indices().prepareCreate(index).setSettings(Settings.builder().put("index.number_of_shards", 5)
+                    .put("index.number_of_replicas", 1)
+            )
+                    .get();
+            LOGGER.info("创建索引 {} 执行状态 {}", index , indexresponse.isAcknowledged());
 
+            return indexresponse.isAcknowledged();
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
+
+    }
+
+    /**
+     * 创建索引别名
+     *
+     * @param index 索引名称
+     * @param alias 索引别名
+     * @return
+     */
+    public static boolean createAlias(String index,String alias){
+        try {
+            if (isIndexExist(index)) {
+/*                IndicesAliasesRequest request = new IndicesAliasesRequest();
+                AliasActions aliasAction =
+                        new IndicesAliasesRequest.AliasActions(AliasActions.Type.ADD)
+                                .index(index)
+                                .alias(alias);
+                request.addAliasAction(aliasAction);*/
+                IndicesAliasesResponse response = client.admin().indices()
+                        .prepareAliases()
+                        .addAlias(index, alias)
+                        .execute().actionGet();
+                LOGGER.info("创建索引别名 {} 执行成功 {}", index);
+                return true;
+            }
+            return false;
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
 
 
     /**
@@ -528,4 +573,247 @@ public class ElasticsearchUtils {
         return sourceList;
     }
 
+    /**
+     * 使用分词查询,并分页
+     *
+     * @param index
+     *            索引名称
+     * @param type
+     *            类型名称,可传入多个type逗号分隔
+     * @param clz
+     *            数据对应实体类
+     * @param currentPage
+     *            当前页
+     * @param pageSize
+     *            每页显示条数
+     * @param fields
+     *            需要显示的字段，逗号分隔（缺省为全部字段）
+     * @param sortField
+     *            排序字段
+     * @param matchPhrase
+     *            true 使用，短语精准匹配
+     * @param highlightField
+     *            高亮字段
+     * @param boolQuery
+     *            查询条件
+     * @return
+     */
+    public static <T> EsPage<T> searchDataPage(String index, String type, Class<T> clz, int currentPage, int pageSize,
+                                               String fields, String sortField, boolean matchPhrase, String highlightField, BoolQueryBuilder boolQuery,SortOrder orderBy) throws Exception{
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index);
+        if (StringUtils.isNotEmpty(type)) {
+            searchRequestBuilder.setTypes(type.split(","));
+        }
+        searchRequestBuilder.setSearchType(SearchType.QUERY_THEN_FETCH);
+
+        // 需要显示的字段，逗号分隔（缺省为全部字段）
+        if (StringUtils.isNotEmpty(fields)) {
+            searchRequestBuilder.setFetchSource(fields.split(","), null);
+        }
+
+        // 排序字段
+        if (StringUtils.isNotEmpty(sortField)) {
+            searchRequestBuilder.addSort(sortField, orderBy);
+        }
+        // 高亮
+        if (StringUtils.isNotEmpty(highlightField)) {
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+
+            // 设置高亮字段
+            highlightBuilder.field(highlightField);
+            searchRequestBuilder.highlighter(highlightBuilder);
+        }
+
+//		searchRequestBuilder.setQuery(QueryBuilders.matchAllQuery());
+        searchRequestBuilder.setQuery(boolQuery);
+
+        // 分页应用
+        int firstSize = (currentPage - 1) * pageSize;
+        searchRequestBuilder.setFrom(firstSize).setSize(pageSize);
+
+        // 设置是否按查询匹配度排序
+        searchRequestBuilder.setExplain(true);
+
+        // 打印的内容 可以在 Elasticsearch head 和 Kibana 上执行查询
+        LOGGER.info("\n{}", searchRequestBuilder);
+
+        // 执行搜索,返回搜索响应信息
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+
+        long totalHits = searchResponse.getHits().totalHits;
+        if(LOGGER.isDebugEnabled()) {
+            long length = searchResponse.getHits().getHits().length;
+
+            LOGGER.info("共查询到[{}]条数据,处理数据条数[{}]", totalHits, length);
+        }
+
+        if (searchResponse.status().getStatus() ==200) {
+            // 解析对象
+            List<T> sourceList = setSearchResponse(clz, searchResponse, highlightField);
+
+            return new EsPage<T>(currentPage, pageSize, (int) totalHits, sourceList);
+        }
+        return null;
+    }
+
+    /**
+     * 使用分词查询,并分页
+     *
+     * @param index
+     *            索引名称
+     * @param type
+     *            类型名称,可传入多个type逗号分隔
+     * @param clz
+     *            数据对应实体类
+     * @param currentPage
+     *            当前页
+     * @param pageSize
+     *            每页显示条数
+     * @param fields
+     *            需要显示的字段，逗号分隔（缺省为全部字段）
+     * @param sortField
+     *            排序字段
+     * @param highlightField
+     *            高亮字段
+     * @param boolQuery
+     *            查询条件
+     * @return
+     */
+    public static <T> EsPage<T> searchDataPage(String index, String type, Class<T> clz, int currentPage, int pageSize,
+                                               String fields, String sortField, String highlightField, BoolQueryBuilder boolQuery) throws Exception{
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index);
+        if (StringUtils.isNotEmpty(type)) {
+            searchRequestBuilder.setTypes(type.split(","));
+        }
+        searchRequestBuilder.setSearchType(SearchType.QUERY_THEN_FETCH);
+
+        // 需要显示的字段，逗号分隔（缺省为全部字段）
+        if (StringUtils.isNotEmpty(fields)) {
+            searchRequestBuilder.setFetchSource(fields.split(","), null);
+        }
+
+        // 排序字段
+        if (StringUtils.isNotEmpty(sortField)) {
+            searchRequestBuilder.addSort(sortField, SortOrder.DESC);
+        }
+        // 高亮（xxx=111,aaa=222）
+        if (StringUtils.isNotEmpty(highlightField)) {
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            // 设置高亮字段
+            highlightBuilder.field(highlightField);
+            searchRequestBuilder.highlighter(highlightBuilder);
+        }
+        searchRequestBuilder.setQuery(boolQuery);
+
+        // 分页应用
+        int firstSize = (currentPage - 1) * pageSize;
+        searchRequestBuilder.setFrom(firstSize).setSize(pageSize);
+
+        // 设置是否按查询匹配度排序
+        searchRequestBuilder.setExplain(true);
+
+        // 打印的内容 可以在 Elasticsearch head 和 Kibana 上执行查询
+        LOGGER.info("\n{}", searchRequestBuilder);
+
+        // 执行搜索,返回搜索响应信息
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+
+        long totalHits = searchResponse.getHits().totalHits;
+        if(LOGGER.isDebugEnabled()) {
+            long length = searchResponse.getHits().getHits().length;
+
+            LOGGER.info("共查询到[{}]条数据,处理数据条数[{}]", totalHits, length);
+        }
+
+        if (searchResponse.status().getStatus() == 200) {
+            // 解析对象
+            List<T> sourceList = setSearchResponse(clz, searchResponse, highlightField);
+
+            return new EsPage<T>(currentPage, pageSize, (int) totalHits, sourceList);
+        }
+        return null;
+    }
+    /**
+     * 使用分词查询,并分页
+     *
+     * @param index
+     *            索引名称
+     * @param type
+     *            类型名称,可传入多个type逗号分隔
+     * @param fields
+     *            需要显示的字段，逗号分隔（缺省为全部字段）
+     * @param avgfields
+     *            聚合字段
+     * @param sortField
+     *            排序字段
+     * @param highlightField
+     *            高亮字段
+     * @param boolQuery
+     *            查询条件
+     * @return
+     */
+    public static SearchResponse searchAvgDataPage(String index, String type, String fields, String sortField,String avgfields,
+                                                   String highlightField, BoolQueryBuilder boolQuery) throws Exception{
+
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index);
+
+        if(StringUtils.isNotEmpty(avgfields)) {
+            AggregationBuilder agg = AggregationBuilders.terms("terms").field(avgfields).size(5000);
+            searchRequestBuilder.addAggregation(agg);
+        }
+
+        if (StringUtils.isNotEmpty(type)) {
+            searchRequestBuilder.setTypes(type.split(","));
+        }
+        // 高亮（xxx=111,aaa=222）
+        if (StringUtils.isNotEmpty(highlightField)) {
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            // 设置高亮字段
+            highlightBuilder.field(highlightField);
+            searchRequestBuilder.highlighter(highlightBuilder);
+        }
+
+        if (StringUtils.isNotEmpty(fields)) {
+            searchRequestBuilder.setFetchSource(fields.split(","), null);
+        }
+
+        if (StringUtils.isNotEmpty(sortField)) {
+            searchRequestBuilder.addSort(sortField, SortOrder.DESC);
+        }
+
+
+        // 需要显示的字段，逗号分隔（缺省为全部字段）
+        if (StringUtils.isNotEmpty(fields)) {
+            searchRequestBuilder.setFetchSource(fields.split(","), null);
+        }
+        searchRequestBuilder.setScroll(new TimeValue(1000));
+        searchRequestBuilder.setSize(10000);
+        searchRequestBuilder.setQuery(boolQuery);
+
+        // 设置是否按查询匹配度排序
+        searchRequestBuilder.setExplain(true);
+
+        // 打印的内容 可以在 Elasticsearch head 和 Kibana 上执行查询
+        LOGGER.info("\n{}", searchRequestBuilder);
+
+        // 执行搜索,返回搜索响应信息
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+
+        return searchResponse;
+    }
+
+
+    /**
+     * 根据属性删除数据
+     * @param
+     * @return
+     * @Author
+     */
+    public static void deleteByQuery(String index,String field,Object fieldValue){
+        BulkByScrollResponse response = DeleteByQueryAction.INSTANCE.newRequestBuilder(client)
+                .filter(QueryBuilders.termQuery(field, fieldValue))
+                .source(index)
+                .get();
+        long deleted = response.getDeleted();
+    }
 }

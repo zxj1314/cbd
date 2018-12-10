@@ -2,6 +2,7 @@ package com.test.cbd.framework.context;
 
 
 import com.test.cbd.framework.bean.DeviceInfo;
+import com.test.cbd.framework.bean.SessionInfo;
 import com.test.cbd.framework.bean.UserToken;
 
 /**
@@ -16,6 +17,8 @@ public class ContextHelper {
     public final static String CONTEXT_SYS_USER = "CONTEXT_SYS_USER";
 	public final static String CONTEXT_SYS_USER_TOKEN = "CONTEXT_SYS_USER_TOKEN";
 	public final static String CONTEXT_SYS_USER_DEVICE = "CONTEXT_SYS_USER_DEVICE";
+
+	public final static String CONTEXT_SYS_SESSION = "CONTEXT_SYS_SESSION";
 
 
     public static void setUserToken(UserToken user) {
@@ -70,6 +73,18 @@ public class ContextHelper {
 	 */
 	public static void releaseContext() {
 		ContextScope.releaseContext();
+	}
+
+	public static void setSessionInfo(SessionInfo sessionInfo) {
+		ContextScope.setParameter(CONTEXT_SYS_SESSION, sessionInfo);
+	}
+
+	/**
+	 * 获取当前SessionInfo
+	 * @return
+	 */
+	public static SessionInfo getSessionInfo() {
+		return (SessionInfo) ContextScope.getParameter(CONTEXT_SYS_SESSION);
 	}
 
 }
